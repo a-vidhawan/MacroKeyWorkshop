@@ -1,0 +1,1 @@
+These are the schematic and pcb files. Designed in KiCAD
