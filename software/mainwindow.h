@@ -3,6 +3,7 @@
 
 
 #include <QMainWindow>
+#include "serialhandler.h"
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QCloseEvent>
@@ -56,6 +57,7 @@ private slots:
 private:
     void createTrayIcon();
     static Profile* profileManager;
+    SerialHandler *m_serialHandler;
 
 QQuickWidget *qmlWidget;
 QSystemTrayIcon *trayIcon;

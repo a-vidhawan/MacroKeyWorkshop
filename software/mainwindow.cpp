@@ -23,7 +23,7 @@ HHOOK MainWindow::keyboardHook = nullptr;
 Profile* MainWindow::profileManager = new Profile(NULL);
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), trayMenu(new QMenu(this)) {
+    : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), trayMenu(new QMenu(this))  m_serialHandler(new SerialHandler(this)){
 
     setWindowTitle("MacroPad - Configuration");
 
@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
 
     createTrayIcon();
+    
+    connect(m_serialHandler, &SerialHandler::dataReceived,
+        this, &MainWindow::onDataReceived);
 }
 
 MainWindow::~MainWindow() {
