@@ -12,8 +12,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Quick QuickWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Quick QuickWidgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Quick QuickWidgets SerialPort)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Quick QuickWidgets SerialPort)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -38,7 +38,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         profile.h profile.cpp
         config.h config.cpp
         fileio.h fileio.cpp
+        serialhandler.h serialhandler.cpp
         ${APPTRACKER_SOURCES}
+        serialhandler.h
+        serialhandler.cpp
 
     )
     qt_add_resources(MacroPad "resources"
@@ -61,7 +64,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(MacroPad PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickWidgets)
+target_link_libraries(MacroPad PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickWidgets Qt${QT_VERSION_MAJOR}::SerialPort)
 
 # Platform-Specific Configurations
 if(APPLE)

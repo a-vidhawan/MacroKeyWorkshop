@@ -48,6 +48,8 @@ protected:
     void closeEvent(QCloseEvent *event) override;  // Override close event to minimize to tray
 
 private slots:
+    void onDataReceived(int number);
+
     void showWindow();  // Restore window from system tray
     void exitApplication();  // Quit application
     void toggleDockIcon(bool show);

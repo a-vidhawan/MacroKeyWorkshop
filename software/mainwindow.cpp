@@ -135,6 +135,86 @@ void MainWindow::toggleDockIcon(bool show) {
 
 }
 
+static void volumeUp()
+{
+    qDebug() << "volumeUp called";
+    INPUT inputs[2] = {};
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = VK_VOLUME_UP;
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wVk = VK_VOLUME_UP;
+    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(2, inputs, sizeof(INPUT));
+}
+
+static void volumeDown()
+{
+    qDebug() << "volumeDown called";
+    INPUT inputs[2] = {};
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = VK_VOLUME_DOWN;
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wVk = VK_VOLUME_DOWN;
+    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(2, inputs, sizeof(INPUT));
+}
+
+static void mute()
+{
+    qDebug() << "mute called";
+    INPUT inputs[2] = {};
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = VK_VOLUME_MUTE;
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wVk = VK_VOLUME_MUTE;
+    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(2, inputs, sizeof(INPUT));
+}
+
+
+std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Notion\\Notion.exe";
+std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
+
+
+void MainWindow::onDataReceived(int number)
+{
+    // qDebug() << "onDataReceived: " << number;
+    // if (number > 10 && number < 20)
+    // {
+    //     profile = number - 10;
+    //     qDebug() << "Profile switched to " << profile;
+    // }
+
+    //Volume Control
+    if (number > 70 && number < 80)
+    {
+        if (number == 72)
+            volumeUp();
+        else if (number == 71)
+            volumeDown();
+        else if (number == 73)
+            mute();
+    }
+
+    //Key Detection
+    if(number == 1)//Button 1 Pressed - Press Key 1 for Profile 0
+    {
+        std::thread([] {
+            extern std::wstring wpathNotion;
+            ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        }).detach();
+        qDebug() << "Notion launched";
+    }
+    if(number == 2) //Button 2 Pressed
+    {
+        std::thread([] {
+            extern std::wstring wpathNotion;
+            ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        }).detach();
+        qDebug() << "Arduino launched";
+    }
+}
+
 // ===== WINDOWS IMPLEMENTATION =====
 
 #ifdef _WIN32
