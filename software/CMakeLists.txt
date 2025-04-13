@@ -42,7 +42,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APPTRACKER_SOURCES}
         serialhandler.h
         serialhandler.cpp
-
     )
     qt_add_resources(MacroPad "resources"
         PREFIX "/"
