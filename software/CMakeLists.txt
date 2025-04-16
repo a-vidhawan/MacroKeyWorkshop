@@ -27,8 +27,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     if(APPLE)
         set(APPTRACKER_SOURCES apptracker.h apptracker.mm)  # Use Objective-C++ on macOS
         set_source_files_properties(apptracker.mm PROPERTIES COMPILE_FLAGS "-x objective-c++")  # Ensure ObjC++ compilation
+
+        set(MACVOLUME_SOURCES macvolume.h macvolume.mm)
+        set_source_files_properties(macvolume.mm PROPERTIES COMPILE_FLAGS "-x objective-c++")
     else()
         set(APPTRACKER_SOURCES apptracker.h apptracker.cpp)  # Use regular C++ for Windows/Linux
+        set(MACVOLUME_SOURCES)
     endif()
 
     qt_add_executable(MacroPad
@@ -40,10 +44,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         fileio.h fileio.cpp
         serialhandler.h serialhandler.cpp
         ${APPTRACKER_SOURCES}
-        serialhandler.h
-        serialhandler.cpp
-        macvolume.mm
-        macvolume.h
+        ${MACVOLUME_SOURCES}
     )
     qt_add_resources(MacroPad "resources"
         PREFIX "/"
