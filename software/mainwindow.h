@@ -68,6 +68,9 @@ QMenu *trayMenu;
     static HHOOK keyboardHook;
 #elif __APPLE__
     static OSStatus hotkeyCallback(EventHandlerCallRef nextHandler, EventRef event, void *userData);
+    static void executeHotkey(int hotKeyNum);
+public:
+    static int macVolume;
 #elif __linux__
     static void listenForHotkeys();
     Display *display;

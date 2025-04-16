@@ -14,10 +14,14 @@
 #include "string"
 
 
-
 #ifdef _WIN32
 
 HHOOK MainWindow::keyboardHook = nullptr;
+#endif
+
+#ifdef __APPLE__
+#include "macvolume.h"
+int MainWindow::macVolume = getSystemVolume();
 #endif
 
 Profile* MainWindow::profileManager = new Profile(NULL);
@@ -140,6 +144,7 @@ void MainWindow::toggleDockIcon(bool show) {
 
 static void volumeUp()
 {
+#ifdef _WIN32
     qDebug() << "volumeUp called";
     INPUT inputs[2] = {};
     inputs[0].type = INPUT_KEYBOARD;
@@ -148,10 +153,17 @@ static void volumeUp()
     inputs[1].ki.wVk = VK_VOLUME_UP;
     inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
     SendInput(2, inputs, sizeof(INPUT));
+#endif
+
+#ifdef __APPLE__
+    MainWindow::macVolume = (MainWindow::macVolume >= 100) ? MainWindow::macVolume : MainWindow::macVolume + 6;
+    setSystemVolume(MainWindow::macVolume);
+#endif
 }
 
 static void volumeDown()
 {
+#ifdef _WIN32
     qDebug() << "volumeDown called";
     INPUT inputs[2] = {};
     inputs[0].type = INPUT_KEYBOARD;
@@ -160,10 +172,17 @@ static void volumeDown()
     inputs[1].ki.wVk = VK_VOLUME_DOWN;
     inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
     SendInput(2, inputs, sizeof(INPUT));
+#endif
+
+#ifdef __APPLE__
+    MainWindow::macVolume = (MainWindow::macVolume <= 0) ? MainWindow::macVolume : MainWindow::macVolume - 6;
+    setSystemVolume(MainWindow::macVolume);
+#endif
 }
 
 static void mute()
 {
+#ifdef _WIN32
     qDebug() << "mute called";
     INPUT inputs[2] = {};
     inputs[0].type = INPUT_KEYBOARD;
@@ -172,6 +191,11 @@ static void mute()
     inputs[1].ki.wVk = VK_VOLUME_MUTE;
     inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
     SendInput(2, inputs, sizeof(INPUT));
+#endif
+
+#ifdef __APPLE__
+    toggleMuteSystem();
+#endif
 }
 
 
@@ -197,9 +221,11 @@ void MainWindow::onDataReceived(int number)
             volumeDown();
         else if (number == 73)
             mute();
+        return;
     }
 
     //Key Detection
+#ifdef _WIN32
     if(number == 1)//Button 1 Pressed - Press Key 1 for Profile 0
     {
         std::thread([] {
@@ -216,6 +242,11 @@ void MainWindow::onDataReceived(int number)
         }).detach();
         qDebug() << "Arduino launched";
     }
+#endif
+
+#ifdef __APPLE__
+    if (number > 0 && number < 10) executeHotkey(number);
+#endif
 }
 
 // ===== WINDOWS IMPLEMENTATION =====
@@ -254,6 +285,7 @@ LRESULT CALLBACK MainWindow::hotkeyCallback(int nCode, WPARAM wParam, LPARAM lPa
 
 //week 8 keyboard version
 void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QString& type, const QString& content){
+#ifdef DEBUG
     UINT vkCode = 0;
 
     // Map keyNum to virtual key code (adjust mapping as needed)
@@ -328,7 +360,7 @@ void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QStrin
     if (!keyboardHook) {
         keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, hotkeyCallback, GetModuleHandle(NULL), 0);
     }
-
+#endif
     profile->setMacro(keyNum, type, content);
 }
 
@@ -345,6 +377,7 @@ void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QStrin
 #include <QFileInfo>
 #include <QDir>
 
+#ifdef DEBUG
 static EventHandlerUPP eventHandlerUPP;
 
 static const std::map<int, int> keyMap = {
@@ -358,6 +391,7 @@ static const std::map<int, int> keyMap = {
     {8, kVK_ANSI_8},
     {9, kVK_ANSI_9}
 };
+#endif
 
 bool isAppBundle(const QString &path) {
     QFileInfo appInfo(path);
@@ -382,10 +416,17 @@ bool isAppBundle(const QString &path) {
 OSStatus MainWindow::hotkeyCallback(EventHandlerCallRef nextHandler, EventRef event, void *userData){
     EventHotKeyID hotKeyID;
     GetEventParameter(event, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hotKeyID), NULL, &hotKeyID);
-    QSharedPointer<Macro> macro = profileManager->getMacro(hotKeyID.id);
+
+    executeHotkey(hotKeyID.id);
+
+    return noErr;
+}
+
+void MainWindow::executeHotkey(int hotKeyNum) {
+    QSharedPointer<Macro> macro = profileManager->getMacro(hotKeyNum);
 
     if (!macro.isNull()) {
-        qDebug() << hotKeyID.id << "key pressed! Type:" << macro->getType() << "Content:" << macro->getContent();
+        qDebug() << hotKeyNum << "key pressed! Type:" << macro->getType() << "Content:" << macro->getContent();
 
         const QString& type = macro->getType();
         const QString& content = macro->getContent();
@@ -400,13 +441,11 @@ OSStatus MainWindow::hotkeyCallback(EventHandlerCallRef nextHandler, EventRef ev
             }
         }
     }
-
-    return noErr;
 }
 
 void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QString& type, const QString& content) {
     qDebug() << "registerGlobalHotkey called with:" << keyNum << type << content;
-
+#ifdef DEBUG
     EventTypeSpec eventType;
     eventType.eventClass = kEventClassKeyboard;
     eventType.eventKind = kEventHotKeyPressed;
@@ -426,7 +465,7 @@ void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QStrin
     } else {
         qDebug() << "Hotkey registered successfully!";
     }
-
+#endif
     profile->setMacro(keyNum, type, content);
 }
 #endif

@@ -18,7 +18,17 @@ SerialHandler::SerialHandler(QObject *parent)
             port = "COM3";//info.portName();
             // Example configuration; adjust port name & baud rate as needed
             COMPORT = new QSerialPort();
-            COMPORT->setPortName(info.portName());   // or "/dev/ttyACM0" etc.
+            QString portName = info.portName();
+            QString portPath = portName;
+
+        #ifdef Q_OS_MAC
+            if (portName.startsWith("tty.")) {
+                continue; // want cu.usbmodemXXXX instead of tty.usbmodemXXXX due to PermissionError
+            }
+            portPath = "/dev/" + portName;
+        #endif
+
+            COMPORT->setPortName(portPath);   // or "/dev/ttyACM0" etc.
             COMPORT->setBaudRate(QSerialPort::BaudRate::Baud19200);
             COMPORT->setParity(QSerialPort::Parity::NoParity);
             COMPORT->setDataBits(QSerialPort::DataBits::Data8);
@@ -31,6 +41,7 @@ SerialHandler::SerialHandler(QObject *parent)
                 qDebug() << "Error opening serial port:" << COMPORT->error();
             } else {
                 qDebug() << "Serial port opened successfully on" << COMPORT->portName();
+                break;
             }
         }
     }
