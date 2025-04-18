@@ -1,0 +1,11 @@
+-rootPath
+C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software
+-cmake-output
+-output-file
+C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/.qt/qml_imports/MacroPad_build.cmake
+-importPath
+C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug
+-importPath
+C:/Qt/6.8.2/mingw_64/qml
+-qrcFiles
+C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/.qt/rcc/resources.qrc

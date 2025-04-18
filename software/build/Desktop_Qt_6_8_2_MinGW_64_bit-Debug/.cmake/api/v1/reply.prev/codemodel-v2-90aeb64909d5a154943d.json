@@ -1,0 +1,88 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-23500b5c3a94e1531c72.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MacroPad",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MacroPad::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MacroPad-Debug-2e058f1de4e34cd996b8.json",
+					"name" : "MacroPad",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MacroPad_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MacroPad_autogen-Debug-6286ae705e2ae7a80bd5.json",
+					"name" : "MacroPad_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MacroPad_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MacroPad_autogen_timestamp_deps-Debug-8d969066e6bac6139937.json",
+					"name" : "MacroPad_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MacroPad_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MacroPad_qmlimportscan-Debug-6a23f48064d05f3f682a.json",
+					"name" : "MacroPad_qmlimportscan",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug",
+		"source" : "C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

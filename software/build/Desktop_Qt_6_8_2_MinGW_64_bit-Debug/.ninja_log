@@ -1,0 +1,27 @@
+# ninja log v6
+32	557	7662741274321453	.qt/qml_imports/MacroPad_build.cmake	bcecade9ba92c7b9
+32	557	7662741274321453	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/.qt/qml_imports/MacroPad_build.cmake	bcecade9ba92c7b9
+93	603	7664682644982378	MacroPad_autogen/timestamp	445fbd5d14777c2b
+93	603	7664682644982378	MacroPad_autogen/mocs_compilation.cpp	445fbd5d14777c2b
+93	603	7664682644982378	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/MacroPad_autogen/timestamp	445fbd5d14777c2b
+93	603	7664682644982378	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/MacroPad_autogen/mocs_compilation.cpp	445fbd5d14777c2b
+3849	3914	7662741307955117	.qt/rcc/qrc_resources.cpp	1b9f7a2a2c25ef7
+3849	3914	7662741307955117	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp	1b9f7a2a2c25ef7
+3811	4062	7662752078168171	CMakeFiles/MacroPad.dir/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp.obj	3ee34ef1d46c7036
+3763	7719	7662752077686798	CMakeFiles/MacroPad.dir/macro.cpp.obj	a036e4ca8a53ddc1
+3790	9285	7662752077961775	CMakeFiles/MacroPad.dir/fileio.cpp.obj	1958a0c2fddce674
+3774	9358	7662752077809235	CMakeFiles/MacroPad.dir/profile.cpp.obj	8a961e1846816bad
+3805	10770	7662752078117580	CMakeFiles/MacroPad.dir/apptracker.cpp.obj	daab31cf0f884e20
+3782	12503	7662752077876470	CMakeFiles/MacroPad.dir/config.cpp.obj	60f901f15c68765f
+2537	8330	7664679833083806	CMakeFiles/MacroPad.dir/main.cpp.obj	ce69873ef5154983
+2532	9331	7664679833032635	CMakeFiles/MacroPad.dir/MacroPad_autogen/mocs_compilation.cpp.obj	199b079740a898d2
+2543	9309	7664679833143600	CMakeFiles/MacroPad.dir/mainwindow.cpp.obj	f86c720b6c87b382
+75	2636	7665451813361088	build.ninja	b5521c1459cc402c
+2550	5840	7664679833176464	CMakeFiles/MacroPad.dir/serialhandler.cpp.obj	26751bb801116c23
+3604	4937	7664682680087313	MacroPad.exe	c4ff5778e6690f1e
+604	3604	7664682650098547	CMakeFiles/MacroPad.dir/macvolume.cpp.obj	b584e9a7e3e5436
+107	637	7665452352764901	MacroPad_autogen/timestamp	445fbd5d14777c2b
+107	637	7665452352764901	MacroPad_autogen/mocs_compilation.cpp	445fbd5d14777c2b
+107	637	7665452352764901	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/MacroPad_autogen/timestamp	445fbd5d14777c2b
+107	637	7665452352764901	C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/MacroPad_autogen/mocs_compilation.cpp	445fbd5d14777c2b
+640	2496	7665452358092492	MacroPad.exe	e87e4111b747efbf
