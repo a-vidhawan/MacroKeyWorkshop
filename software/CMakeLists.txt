@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(MacroPad VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum macOS deployment version")
+
 message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 
 set(CMAKE_AUTOUIC ON)
