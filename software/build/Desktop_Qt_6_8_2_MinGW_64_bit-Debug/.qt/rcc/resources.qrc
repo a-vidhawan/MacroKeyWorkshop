@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file alias="Main.qml">C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/Main.qml</file>
-    <file alias="KeyConfig.qml">C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/KeyConfig.qml</file>
-    <file alias="ProfileManager.qml">C:/Users/aarav/OneDrive/Documents/GitHub/MacroKeyWorkshop/software/ProfileManager.qml</file>
-  </qresource>
-</RCC>
-
