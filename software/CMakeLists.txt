@@ -45,6 +45,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         serialhandler.h serialhandler.cpp
         ${APPTRACKER_SOURCES}
         ${MACVOLUME_SOURCES}
+        mackeysim.h
+        mackeysim.mm
     )
     qt_add_resources(MacroPad "resources"
         PREFIX "/"
@@ -88,13 +90,40 @@ if(APPLE)
             $<TARGET_FILE_DIR:MacroPad>/../Resources/MPIcon.png
     )
 
-    target_link_libraries(MacroPad PRIVATE "-framework Carbon" "-framework ApplicationServices")
+    target_link_libraries(MacroPad PRIVATE "-framework Carbon" "-framework ApplicationServices" "-framework AppKit")
     set_target_properties(MacroPad PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_GUI_IDENTIFIER com.example.MacroPad
         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
         MACOSX_BUNDLE_ICON_FILE MPIcon.icns
+    )
+
+    set(ENTITLEMENTS_FILE "${CMAKE_BINARY_DIR}/no-sandbox.entitlements")
+    file(WRITE ${ENTITLEMENTS_FILE}
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+        <plist version=\"1.0\">
+        <dict>
+            <key>com.apple.security.app-sandbox</key>
+            <false/>
+            <key>com.apple.security.temporary-exception.apple-events</key>
+            <true/>
+            <key>com.apple.security.automation.apple-events</key>
+            <true/>
+        </dict>
+        </plist>"
+    )
+
+    # Apply entitlements and code signing
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "-"
+        XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS ${ENTITLEMENTS_FILE}
+    )
+
+    # Ensure the app is not sandboxed
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST $<TARGET_FILE_DIR:MacroPad>/../Info.plist
     )
 elseif(WIN32)
     target_link_libraries(MacroPad PRIVATE user32.lib)
