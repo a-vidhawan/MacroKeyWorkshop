@@ -31,4 +31,8 @@ QString Macro::getContent() const {
     return content;
 }
 
+QString Macro::toString() const {
+    return "Type: " + QString(type) + " Content: " + QString(content);
+}
+
 

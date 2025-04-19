@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QMenu>
 #include <QQuickItem>
+#include <QDebug>
 #include <iostream>
 #include <thread>
 #include "profile.h"
@@ -24,7 +25,7 @@ HHOOK MainWindow::keyboardHook = nullptr;
 int MainWindow::macVolume = getSystemVolume();
 #endif
 
-Profile* MainWindow::profileManager = new Profile(NULL);
+QList<Profile*> profiles;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), trayMenu(new QMenu(this)), m_serialHandler(new SerialHandler(this)){
@@ -41,10 +42,12 @@ MainWindow::MainWindow(QWidget *parent)
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
     qmlRegisterType<Macro>("Macro", 1, 0, "Macro");
 
+    initializeProfiles();
+
     // Register with QML
     qmlWidget->engine()->rootContext()->setContextProperty("fileIO", fileIO);
     qmlWidget->engine()->rootContext()->setContextProperty("Macro", macro);
-    qmlWidget->engine()->rootContext()->setContextProperty("profileInstance", profileManager);
+    qmlWidget->engine()->rootContext()->setContextProperty("profileInstance", profileInstance);
     qmlWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
     qmlWidget->setSource(QUrl("qrc:/Main.qml"));
 
@@ -68,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     
     connect(m_serialHandler, &SerialHandler::dataReceived,
         this, &MainWindow::onDataReceived);
+    QObject::connect(&appTracker, &AppTracker::appChanged, this, &MainWindow::switchCurrentProfile);
 }
 
 MainWindow::~MainWindow() {
@@ -75,6 +79,61 @@ MainWindow::~MainWindow() {
         UnhookWindowsHookEx(keyboardHook);
         keyboardHook = nullptr;
     } */
+    qDeleteAll(profiles);
+    profiles.clear();
+}
+
+// required profileCount function for QML_PROPERTY
+qsizetype MainWindow::profileCount(QQmlListProperty<Profile> *list) {
+    auto profiles = static_cast<QList<Profile*>*>(list->data);
+    return profiles->size();
+}
+
+// required profileAt function for QML_PROPERTY
+Profile *MainWindow::profileAt(QQmlListProperty<Profile> *list, qsizetype index) {
+    auto profiles = static_cast<QList<Profile*>*>(list->data);
+    return profiles->at(index);
+}
+
+// getter for QML to access profiles
+QQmlListProperty<Profile> MainWindow::getProfiles() {
+    return QQmlListProperty<Profile>(
+        this,
+        &profiles, // use MainWindow instance as the data object
+        &MainWindow::profileCount,
+        &MainWindow::profileAt
+        );
+}
+
+void MainWindow::setProfileInstance(Profile* profile) {
+    if (profileInstance != profile) {
+        profileInstance = profile;
+        emit profileInstanceChanged();
+    }
+}
+
+void MainWindow::initializeProfiles() {
+    QString names[6] = {"General", "Profile 1", "Profile 2", "Profile 3", "Profile 4", "Profile 5"};
+    QString apps[6] = {"", "Google Chrome", "Qt Creator", "MacroPad", "Discord", "Spotify"};
+
+    for (int i = 0; i < 6; ++i) {
+        Profile* profile = Profile::loadProfile(names[i]);
+        profiles.append(profile);
+    }
+
+    profileInstance = profiles[0];
+    currentProfile = profiles[0];
+}
+
+void MainWindow::switchCurrentProfile(const QString& appName) {
+    qDebug() << "Current app:" << appName;
+    for (Profile* profile : profiles) {
+        if (profile->getApp() == appName) {
+            currentProfile = profile;
+            qDebug() << "Current profile set to:" << currentProfile->getName();
+            return;
+        }
+    }
 }
 
 void MainWindow::createTrayIcon() {
@@ -423,7 +482,7 @@ OSStatus MainWindow::hotkeyCallback(EventHandlerCallRef nextHandler, EventRef ev
 }
 
 void MainWindow::executeHotkey(int hotKeyNum) {
-    QSharedPointer<Macro> macro = profileManager->getMacro(hotKeyNum);
+    QSharedPointer<Macro> macro = profileInstance->getMacro(hotKeyNum);
 
     if (!macro.isNull()) {
         qDebug() << hotKeyNum << "key pressed! Type:" << macro->getType() << "Content:" << macro->getContent();

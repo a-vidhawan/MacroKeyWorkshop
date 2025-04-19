@@ -20,6 +20,8 @@ public:
     QString getContent() const;
     void setContent(const QString& newContent);
 
+    QString toString() const;
+
 signals:
     void typeChanged();
     void contentChanged();
