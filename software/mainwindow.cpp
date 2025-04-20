@@ -427,14 +427,9 @@ void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QStrin
 }
 
 
-std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Microsoft \VS Code\\Code.exe";
+std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Microsoft \\VS Code\\Code.exe";
 std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
 
-//std::thread([] {
-    //         extern std::wstring wpathNotion;
-    //         ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    //     }).detach();
-    //     qDebug() << "Notion launched";
 std::wstring wpathExec;
 void MainWindow::executeHotkey(int hotKeyNum)
 {
@@ -446,24 +441,22 @@ void MainWindow::executeHotkey(int hotKeyNum)
         const QString& type    = macro->getType();
         const QString& content = macro->getContent();
 
+        // std::string s = content.toStdString();
+        // std::replace(s.begin(), s.end(), '/', '\\');
+
         wpathExec = content.toStdWString();
+        std::replace(wpathExec.begin(), wpathExec.end(), L'/', L'\\');
+        wpathExec = wpathExec.substr(1);
+
+        qDebug() << "corrected path" << wpathExec;
 
         if (type == "keystroke") {
-            // no-op
+            // I'm not sure how we do keystroke execution on win
         }
-        else if (type == "executable") {
-            // std::wstring wcontent = content.toStdWString();
-            // ShellExecuteW(
-            //     NULL,
-            //     L"open",
-            //     wcontent.c_str(),
-            //     NULL,
-            //     NULL,
-            //     SW_SHOWNORMAL
-            //     );
+        else if (type == "executable") { // need the executable paths in the correct format
             std::thread([] {
                 extern std::wstring wpathExec;
-                    ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+                    ShellExecuteW(NULL, L"open", wpathExec.c_str(), NULL, NULL, SW_SHOWNORMAL);
                 }).detach();
                 qDebug() << content << " launched";
         }
