@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QMenu>
 #include <QQuickItem>
+#include <QScrollArea>
 #include <QDebug>
 #include <iostream>
 #include <thread>
@@ -263,42 +264,42 @@ static void mute()
 static void scrollUp()
 {
 #ifdef _WIN32
-    qDebug() << "scrollUp called on Windows";
-    QScrollArea* scrollArea = ui->scrollArea;
-    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
-    if (vScrollBar) {
-        vScrollBar->setValue(vScrollBar->value() - 50);
-    }
+    // qDebug() << "scrollUp called on Windows";
+    // QScrollArea* scrollArea = ui->scrollArea;
+    // QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    // if (vScrollBar) {
+    //     vScrollBar->setValue(vScrollBar->value() - 50);
+    // }
 #endif
 
 #ifdef __APPLE__
-    qDebug() << "scrollUp called on macOS";
-    QScrollArea* scrollArea = ui->scrollArea;
-    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
-    if (vScrollBar) {
-        vScrollBar->setValue(vScrollBar->value() - 50);
-    }
+    // qDebug() << "scrollUp called on macOS";
+    // QScrollArea* scrollArea = ui->scrollArea;
+    // QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    // if (vScrollBar) {
+    //     vScrollBar->setValue(vScrollBar->value() - 50);
+    // }
 #endif
 }
 
 static void scrollDown()
 {
 #ifdef _WIN32
-    qDebug() << "scrollDown called on Windows";
-    QScrollArea* scrollArea = ui->scrollArea;
-    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
-    if (vScrollBar) {
-        vScrollBar->setValue(vScrollBar->value() + 50);
-    }
+    // qDebug() << "scrollDown called on Windows";
+    // QScrollArea* scrollArea = ui->scrollArea;
+    // QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    // if (vScrollBar) {
+    //     vScrollBar->setValue(vScrollBar->value() + 50);
+    // }
 #endif
 
 #ifdef __APPLE__
-    qDebug() << "scrollDown called on macOS";
-    QScrollArea* scrollArea = ui->scrollArea;
-    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
-    if (vScrollBar) {
-        vScrollBar->setValue(vScrollBar->value() + 50);
-    }
+    // qDebug() << "scrollDown called on macOS";
+    // QScrollArea* scrollArea = ui->scrollArea;
+    // QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    // if (vScrollBar) {
+    //     vScrollBar->setValue(vScrollBar->value() + 50);
+    // }
 #endif
 }
 
