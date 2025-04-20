@@ -258,6 +258,52 @@ static void mute()
 }
 
 
+// Scroll functions
+
+static void scrollUp()
+{
+#ifdef _WIN32
+    qDebug() << "scrollUp called on Windows";
+    QScrollArea* scrollArea = ui->scrollArea;
+    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    if (vScrollBar) {
+        vScrollBar->setValue(vScrollBar->value() - 50);
+    }
+#endif
+
+#ifdef __APPLE__
+    qDebug() << "scrollUp called on macOS";
+    QScrollArea* scrollArea = ui->scrollArea;
+    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    if (vScrollBar) {
+        vScrollBar->setValue(vScrollBar->value() - 50);
+    }
+#endif
+}
+
+static void scrollDown()
+{
+#ifdef _WIN32
+    qDebug() << "scrollDown called on Windows";
+    QScrollArea* scrollArea = ui->scrollArea;
+    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    if (vScrollBar) {
+        vScrollBar->setValue(vScrollBar->value() + 50);
+    }
+#endif
+
+#ifdef __APPLE__
+    qDebug() << "scrollDown called on macOS";
+    QScrollArea* scrollArea = ui->scrollArea;
+    QScrollBar* vScrollBar = scrollArea->verticalScrollBar();
+    if (vScrollBar) {
+        vScrollBar->setValue(vScrollBar->value() + 50);
+    }
+#endif
+}
+
+
+
 // std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Notion\\Notion.exe";
 // std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
 
