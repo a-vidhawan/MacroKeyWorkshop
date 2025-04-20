@@ -495,7 +495,26 @@ void MainWindow::executeHotkey(int hotKeyNum)
         qDebug() << "corrected path" << wpathExec;
 
         if (type == "keystroke") {
-            // I'm not sure how we do keystroke execution on win
+            std::thread([content]() {
+                QMap<QString, int> keyMap = {
+                    {"Cmd", VK_LWIN}, {"Shift", VK_SHIFT}, {"Ctrl", VK_CONTROL}, {"Alt", VK_MENU},
+                    {"Space", VK_SPACE}, {"Enter", VK_RETURN}, {"Backspace", VK_BACK}, {"Tab", VK_TAB},
+                    {"Esc", VK_ESCAPE}
+                };
+                for (char c = '0'; c <= '9'; ++c) keyMap[QString(c)] = c;
+                for (char c = 'A'; c <= 'Z'; ++c) keyMap[QString(c)] = c;
+
+                QStringList keySequence = content.split("+");
+                std::vector<int> keyCodes;
+                for (const QString& key : std::as_const(keySequence)) {
+                    if (keyMap.contains(key)) keyCodes.push_back(keyMap[key]);
+                }
+
+                for (int key : keyCodes) keybd_event(key, 0, 0, 0);
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                for (auto it = keyCodes.rbegin(); it != keyCodes.rend(); ++it)
+                    keybd_event(*it, 0, KEYEVENTF_KEYUP, 0);
+            }).detach();
         }
         else if (type == "executable") { // need the executable paths in the correct format
             std::thread([] {
