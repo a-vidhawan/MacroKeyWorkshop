@@ -258,8 +258,8 @@ static void mute()
 }
 
 
-std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Notion\\Notion.exe";
-std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
+// std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Notion\\Notion.exe";
+// std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
 
 
 void MainWindow::onDataReceived(int number)
@@ -285,22 +285,25 @@ void MainWindow::onDataReceived(int number)
 
     //Key Detection
 #ifdef _WIN32
-    if(number == 1)//Button 1 Pressed - Press Key 1 for Profile 0
-    {
-        std::thread([] {
-            extern std::wstring wpathNotion;
-            ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
-        }).detach();
-        qDebug() << "Notion launched";
-    }
-    if(number == 2) //Button 2 Pressed
-    {
-        std::thread([] {
-            extern std::wstring wpathNotion;
-            ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
-        }).detach();
-        qDebug() << "Arduino launched";
-    }
+    // if(number == 1)//Button 1 Pressed - Press Key 1 for Profile 0
+    // {
+    //     std::thread([] {
+    //         extern std::wstring wpathNotion;
+    //         ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    //     }).detach();
+    //     qDebug() << "Notion launched";
+    // }
+    // if(number == 2) //Button 2 Pressed
+    // {
+    //     std::thread([] {
+    //         extern std::wstring wpathNotion;
+    //         ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    //     }).detach();
+    //     qDebug() << "Arduino launched";
+    // }
+
+    if (number > 0 && number < 10) executeHotkey(number);
+
 #endif
 
 #ifdef __APPLE__
@@ -423,6 +426,49 @@ void MainWindow::registerGlobalHotkey(Profile* profile, int keyNum, const QStrin
     profile->setMacro(keyNum, type, content);
 }
 
+
+std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Microsoft \VS Code\\Code.exe";
+std::wstring wpathNotion(pathNotion.begin(), pathNotion.end());
+
+//std::thread([] {
+    //         extern std::wstring wpathNotion;
+    //         ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    //     }).detach();
+    //     qDebug() << "Notion launched";
+std::wstring wpathExec;
+void MainWindow::executeHotkey(int hotKeyNum)
+{
+    QSharedPointer<Macro> macro = profileInstance->getMacro(hotKeyNum);
+    if (!macro.isNull()) {
+        qDebug() << hotKeyNum << "key pressed! Type:" << macro->getType()
+        << "Content:" << macro->getContent();
+
+        const QString& type    = macro->getType();
+        const QString& content = macro->getContent();
+
+        wpathExec = content.toStdWString();
+
+        if (type == "keystroke") {
+            // no-op
+        }
+        else if (type == "executable") {
+            // std::wstring wcontent = content.toStdWString();
+            // ShellExecuteW(
+            //     NULL,
+            //     L"open",
+            //     wcontent.c_str(),
+            //     NULL,
+            //     NULL,
+            //     SW_SHOWNORMAL
+            //     );
+            std::thread([] {
+                extern std::wstring wpathExec;
+                    ShellExecuteW(NULL, L"open", wpathNotion.c_str(), NULL, NULL, SW_SHOWNORMAL);
+                }).detach();
+                qDebug() << content << " launched";
+        }
+    }
+}
 #endif
 
 // ===== MACOS IMPLEMENTATION =====

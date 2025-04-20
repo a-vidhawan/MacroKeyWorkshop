@@ -52,6 +52,8 @@ public:
     void doTasks(std::vector<INPUT>& inputs);
     static std::unordered_map<UINT, std::function<void()>> hotkeyActions;
 
+    void executeHotkey(int hotKeyNum);
+
 #endif
 
 Q_INVOKABLE void registerGlobalHotkey(Profile* profile, int keyNum, const QString& type, const QString& content);
