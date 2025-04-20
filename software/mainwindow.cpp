@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "config.h"
 #include "fileio.h"
 #include "QApplication"
 #include <QQmlEngine>
@@ -10,10 +9,8 @@
 #include <QQuickItem>
 #include <QScrollArea>
 #include <QDebug>
-#include <iostream>
 #include <thread>
 #include "profile.h"
-#include "string"
 
 
 #ifdef _WIN32
