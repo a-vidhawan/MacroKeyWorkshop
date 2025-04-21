@@ -31,3 +31,8 @@ Repository with all required files and instructions for the Macro Key Workshop -
 - Click `Save`.
 - Your keys should now do what you've selected them to.
 - The knob is restricted to volume for this workshop. Pressing the knob mutes audio.
+
+## Workshop Activity:
+- FIll in the blanks in the `MacroKeyWorkshop.ino` file, by looking at the `mainwindow.cpp` file.
+- You can find `mainwindow.cpp` in the software folder in the repo.
+- After filling the blanks, you can upload the code to the Arduino without errors. You're now all set to use the configuration software.
