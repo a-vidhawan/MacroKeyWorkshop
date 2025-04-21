@@ -1,9 +1,16 @@
+// INO for the MacroKey Workhop - SP25
+// Support PCB 1 - With 2 Keys and 1 Volume Knob
+// GitHub Repo - https://github.com/a-vidhawan/MacroKeyWorkshop
+
 #define BUTTON1 7
 #define BUTTON2 6
 
 // Define rotary encoder pins
-#define ENC_A 2
-#define ENC_B 3
+
+// The encoder pins can be seen in the schmeatic image on the README file.
+// identify which pins pin 'A' and 'B' are connected to, via the schematic image.
+#define ENC_A ___
+#define ENC_B ___
 
 #define MUTEBUTTON 0
 
@@ -33,23 +40,23 @@ void setup()
 
 }
 
-
+// look through 'ondataReceived' in 'mainwindow.cpp' on the github repo to fill the blanks.
 void loop() 
 {
   
   if(digitalRead(BUTTON1) == LOW) 
   {
-    Serial.println("1");
+    Serial.println("___");
     delay(250);
   }
   if(digitalRead(BUTTON2) == LOW) 
   {
-    Serial.println("2");
+    Serial.println("___");
     delay(250);
   }
   if(digitalRead(MUTEBUTTON) == LOW) 
   {
-    Serial.println("73");
+    Serial.println("___");
     delay(250);
   }
 
@@ -59,11 +66,11 @@ void loop()
 
   // If count has changed print the new value to serial
   if(counter < lastCounter){
-    Serial.println(71); //volume DOWM
+    Serial.println(___); //volume DOWM
     lastCounter = counter;
   }
   else if (counter > lastCounter) {
-    Serial.println(72); //volume UP
+    Serial.println(___); //volume UP
     lastCounter = counter;
   }
 }
