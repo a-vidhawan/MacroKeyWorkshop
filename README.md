@@ -3,14 +3,19 @@ Repository with all required files and instructions for the Macro Key Workshop -
 
 ## First Steps:
 - Open Arduino IDE on your computer.
-- Snap thr Mini keyboard onto the Arduino.
-- Plug the Arduino into your computer
-- Dowload the INO for the workshop
-- Upload it to your Arduino. Make sure there are no errors.
-- Open Serial Monitor to check if you are receiving signals.
+- Snap the Mini keyboard onto the Arduino.
+- Plug the Arduino into your computer.
+- Download the `.ino` for the workshop from the Arduino INOs folder.
+- Upload (->) the firmware to your Arduino. Make sure there are no errors.
+- Open Serial Monitor (Tools -> Serial Monitor) and test the controls on the device to check if you are receiving data.
 
 ## Installing the Configuration Software:
 ### MacOS:
+
+- On GitHub, click on the zip file that corresponds to your MacOS version (`MacroPad-MacOS-10_XX.zip`).
+- On the right of the screen, click on the "Download raw file" button.
+- Unzip the downloaded file, and double click the `MacroPad.app` that appears. MacOS will likely not allow you to open the app yet.
+- Go to your Mac settings app, and go to Privacy and Security and scroll all the way down. Next to the message that says that `MacroPad.app` was blocked, click "Open Anyway."
 
 ### Windows:
 
