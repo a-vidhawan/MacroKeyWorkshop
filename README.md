@@ -1,6 +1,15 @@
 # MacroKeyWorkshop
 Repository with all required files and instructions for the Macro Key Workshop - first held in Spring 2025.
 
+## Navigation
+- [First Steps](#first-steps)
+- [Installing the Configuration Software](#installing-the-configuration-software)
+  - [MacOS](#macos)
+  - [Windows](#windows)
+- [Using the Software](#using-the-software)
+  - [Configuring Keys](#configuring-keys)
+- [Workshop Activity](#workshop-activity)
+
 ## First Steps:
 - Open Arduino IDE on your computer.
 - Snap the Mini keyboard onto the Arduino.
