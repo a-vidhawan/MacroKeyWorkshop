@@ -49,7 +49,7 @@ void loop() {
       }
 
       while (Serial.available() && index < IMG_SIZE) {
-        imageMatrix[profile][imageSlot][index++] = Serial.read();
+        imageMatrix[profile][imageSlot][index++] = "0x" + Serial.read() + Serial.read();
       }
 
       if (index == IMG_SIZE) {

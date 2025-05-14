@@ -1,80 +1,83 @@
+// SerialHandler.cpp  — minimal patch to support ESP32 + UNO safely
 #include "serialhandler.h"
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QDebug>
 
 SerialHandler::SerialHandler(QObject *parent)
     : QObject(parent),
+    COMPORT(nullptr),
     buffer(nullptr)
 {
     qDebug() << "Available ports:";
-    std::string port = "";
+
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
         qDebug() << "  Name:" << info.portName()
         << "  Description:" << info.description()
         << "  System Location:" << info.systemLocation();
 
-        if(info.description().mid(0,3) == "UNO")
-        {
-            port = "COM3";//info.portName();
-            // Example configuration; adjust port name & baud rate as needed
-            COMPORT = new QSerialPort();
-            QString portName = info.portName();
-            QString portPath = portName;
+        // ------- 1. recognise boards we care about -------
+        const bool isUNO   = info.description().mid(0,3) == "UNO";
+        const bool isCP210 = info.description().contains("CP210", Qt::CaseInsensitive);
+        const bool isCH34  = info.description().contains("CH34",  Qt::CaseInsensitive);
+        if (!(isUNO || isCP210 || isCH34))
+            continue;                              // not for us
 
-        #ifdef Q_OS_MAC
-            if (portName.startsWith("tty.")) {
-                continue; // want cu.usbmodemXXXX instead of tty.usbmodemXXXX due to PermissionError
-            }
-            portPath = "/dev/" + portName;
-        #endif
+        // ------- 2. open the port -------
+        COMPORT = new QSerialPort(info);           // ctor sets portName
+        const qint32 baud =
+            isUNO ? QSerialPort::Baud19200         // your small pad
+                  : QSerialPort::Baud115200;       // ESP32 default
+        COMPORT->setBaudRate(baud);
+        COMPORT->setParity(QSerialPort::NoParity);
+        COMPORT->setDataBits(QSerialPort::Data8);
+        COMPORT->setStopBits(QSerialPort::OneStop);
+        COMPORT->setFlowControl(QSerialPort::NoFlowControl);
 
-            COMPORT->setPortName(portPath);   // or "/dev/ttyACM0" etc.
-            COMPORT->setBaudRate(QSerialPort::BaudRate::Baud19200);
-            COMPORT->setParity(QSerialPort::Parity::NoParity);
-            COMPORT->setDataBits(QSerialPort::DataBits::Data8);
-            COMPORT->setStopBits(QSerialPort::StopBits::OneStop);
-            COMPORT->setFlowControl(QSerialPort::FlowControl::NoFlowControl);
-            COMPORT->open(QIODevice::ReadWrite);
-
-            // Try to open the port
-            if (!COMPORT->isOpen()) {
-                qDebug() << "Error opening serial port:" << COMPORT->error();
-            } else {
-                qDebug() << "Serial port opened successfully on" << COMPORT->portName();
-                break;
-            }
+        if (!COMPORT->open(QIODevice::ReadWrite)) {
+            qDebug() << "Error opening serial port:"
+                     << COMPORT->errorString();
+            delete COMPORT;
+            COMPORT = nullptr;
+            continue;      // try the next candidate port, if any
         }
+
+        qDebug() << "Serial port opened successfully on"
+                 << COMPORT->portName() << "@" << baud;
+        break;             // success → stop scanning
     }
 
-    connect(COMPORT, &QSerialPort::readyRead, this, &SerialHandler::readSerialData);
-
+    // ------- 3. hook up readyRead only if we actually have a port -------
+    if (COMPORT) {
+        connect(COMPORT, &QSerialPort::readyRead,
+                this,     &SerialHandler::readSerialData);
+    } else {
+        qDebug() << "No compatible serial device found.";
+    }
 }
 
 SerialHandler::~SerialHandler()
 {
-    // Clean up
-    if (COMPORT->isOpen()) {
-        COMPORT->close();
+    if (COMPORT) {
+        if (COMPORT->isOpen())
+            COMPORT->close();
+        delete COMPORT;
     }
 }
 
+// ---------------- your original methods remain unchanged ----------------
 void SerialHandler::readSerialData()
 {
     QByteArray data = COMPORT->readAll();
     qDebug() << "Received data (raw bytes):" << data;
 
-    // Convert raw bytes to QString and trim off \r, \n, or other whitespace
     QString trimmedText = QString::fromUtf8(data).trimmed();
-
-
-    // If you want it back in a QByteArray named 'butt'
     QByteArray butt = trimmedText.toUtf8();
     qDebug() << "Number only:" << butt;
 
     int number = trimmedText.toInt();
     qDebug() << "Integer:" << number;
 
-    // Or emit the trimmed string
     emit dataReceived(number);
 }
 
