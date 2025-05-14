@@ -99,7 +99,7 @@ if(APPLE)
         MACOSX_BUNDLE_ICON_FILE MPIcon.icns
     )
 elseif(WIN32)
-    target_link_libraries(MacroPad PRIVATE user32.lib)
+    target_link_libraries(MacroPad PRIVATE user32.lib dxva2.lib)
     set_target_properties(MacroPad PROPERTIES WIN32_EXECUTABLE TRUE)
 elseif(UNIX AND NOT APPLE) # Linux
     find_package(X11 REQUIRED)

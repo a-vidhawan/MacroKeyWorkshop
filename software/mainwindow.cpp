@@ -10,6 +10,9 @@
 #include <QScrollArea>
 #include <QDebug>
 #include <thread>
+#include <windows.h>
+#include <highlevelmonitorconfigurationapi.h>
+#include <physicalmonitorenumerationapi.h>
 #include "profile.h"
 
 
@@ -300,6 +303,37 @@ static void scrollDown()
 #endif
 }
 
+static void updateBrightness(bool increase){
+
+
+#ifdef _WIN32
+    DWORD updateValue = increase? +5 : -5;
+    HMONITOR hMonitor = MonitorFromWindow(NULL, MONITOR_DEFAULTTOPRIMARY);
+
+    PHYSICAL_MONITOR physicalMonitor;
+    if (!GetPhysicalMonitorsFromHMONITOR(hMonitor, 1, &physicalMonitor)) {
+        std::cerr << "Failed to get physical monitor handle\n";
+        return;
+    }
+
+    DWORD minBrightness, currBrightness, maxBrightness;
+    GetMonitorBrightness(physicalMonitor.hPhysicalMonitor, &minBrightness, &currBrightness, &maxBrightness);
+
+
+    // Set brightness on the first physical monitor
+    if (!SetMonitorBrightness(physicalMonitor.hPhysicalMonitor, currBrightness + updateValue)) {
+        std::cerr << "Failed to set brightness\n";
+    }
+
+    // Clean up
+    DestroyPhysicalMonitors(1, &physicalMonitor);
+#endif
+
+#ifdef __APPLE__
+
+#endif
+
+}
 
 
 // std::string pathNotion = "C:\\Users\\aarav\\AppData\\Local\\Programs\\Notion\\Notion.exe";
